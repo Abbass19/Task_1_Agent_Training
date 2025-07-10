@@ -1,3 +1,3 @@
-# Ignore Python virtual environment folders
+# Ignore virtual environment folder at root
+.venv/
 venv/
-
