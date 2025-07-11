@@ -1,0 +1,37 @@
+I was working on a diagnostic system for training in which it exports the data of systematic experimentation and makes ML
+studies on those data and calculates with that study some weight parameters we can use to control the Characteristic metrics of
+how an agent performs in terms of Stability, Generalization and Diversity.
+
+When I was checking the parameters I need to alter and I need to calculate their weight effect on each of the Characteristic
+metrics the 3 of them, I found All I can change is the hyperparameters and size of neural network. What I recognized is that
+the application I was intending to do including saving data and making studies on the data are what hyperparameter tuning
+module is supposed to do. Which means all this process can be replaced with a good usage of Optuna the hyperparameter tuning
+function. In the last implementation, I separated Optuna usage from the training function. Through running the Optuna first
+and saving the best result. Then I would start the training of the agent using the saved best hyperparameter. Maybe I did this
+functional splitting in bad way. And maybe that had to do with the model always overfitting dramatically.
+
+In this moment due to lack of professional supervision I can't know if I need to implement that external diagnostic system to
+avoid overfitting or I need to make a better Optuna usage in the training function where the later would be enough to solve
+overfitting problems.
+
+The options I have are. First do an Optuna training implementation that includes splitting data into 3 environments. And see what
+results I will really get. The second option is to implement that diagnostic system to monitor micro metrics and the effect of all
+parameters change. Evolve the controllers and build some machine to help through hyperparameter to avoid overfitting.
+
+
+Due to that I will doing 2 more versions sorrowfully.
+1. Version 4; In this version I will change the train_one_agent to use Optuna inside and check if that helps remove the overfitting
+  problem. If that works we are done and no need to do anything else
+
+2. Version 5; This version is the monitoring version. It has a main function called  run_batch that runs the main function 10 times
+  so we can get some average for all numbers we actually need. The second step is running scratch code for 200 iterations to collect
+  data after implementing the micro metrics. After that we design the diagnostic system with visualization and stuff and modeling
+  functions and adjusting their parameters.
+
+
+Version 4 Results:
+When we merged the 2 functions instead of separating the hyperparameter tuning into 2 the results were better significantly. The
+overfitting is less. And the actions are more balanced. We don't seem need to do any external work. But we still have overfitting.
+
+
+We need to do our work to diagnose parameters and metrics and look for overfitting signs. And this would be biiiig.

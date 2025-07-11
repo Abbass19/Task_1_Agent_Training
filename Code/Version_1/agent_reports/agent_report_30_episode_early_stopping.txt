@@ -1,0 +1,47 @@
+==================== AGENT PERFORMANCE REPORT ====================
+Used Hyperparameters: {'lr': 0.00037051489411134, 'gamma': 0.9980313799314537, 'clip_epsilon': 0.2728871783710021, 'rollout_len': 512, 'update_epochs': 11}
+
+--- Training Phase ---
+Total Profit: [4838.208984375]
+Avg Profit/Step: [1.9579963684082031]
+Max Gain: [432.3671875]
+Max Loss: [-262.2080078125]
+Steps: 2471
+Positive Steps: [1274]
+Negative Steps: [950]
+Neutral Steps: [247]
+Buy: 636 times (25.738567381626872%)
+Sell: 583 times (23.5936867664913%)
+Hold: 1252 times (50.66774585188183%)
+Final Inventory: 62
+Final Cash: [[8687.81]]
+
+--- Validation Phase ---
+Total Profit: [-170.6708984375]
+Avg Profit/Step: [-0.27661409974098206]
+Max Gain: [59.7451171875]
+Max Loss: [-45.75390625]
+Steps: 617
+Positive Steps: [230]
+Negative Steps: [259]
+Neutral Steps: [128]
+Buy: 2 times (0.3241491085899514%)
+Sell: 0 times (0.0%)
+Hold: 615 times (99.67585089141005%)
+Final Inventory: 2
+Final Cash: [[9584.209]]
+
+--- Testing Phase ---
+Total Profit: [475.267578125]
+Avg Profit/Step: [0.770287811756134]
+Max Gain: [99.8486328125]
+Max Loss: [-94.0]
+Steps: 617
+Positive Steps: [273]
+Negative Steps: [261]
+Neutral Steps: [83]
+Buy: 4 times (0.6482982171799028%)
+Sell: 0 times (0.0%)
+Hold: 613 times (99.3517017828201%)
+Final Inventory: 4
+Final Cash: [[9157.91]]

@@ -1,0 +1,67 @@
+This file is the first of it's kind. To be able tp vide code in a good way, we need to write down all the high level description
+of the classes and signatures of functions and so one to that thing work as we want. It is not enough to write
+some wide languages description of the functionality because that we be implemented infinite ways and infinite signatures.
+
+
+
+
+
+environment class : We can copy that. I am satisfied with the implementation
+log_api: library and not a class : signatures
+    initialize_log_if_missing(): starts the log named "log.json" inside the models
+    folder as well. No input procedure. This file to be created has some variables
+    that we append to. Structure or components of "log.json": 3. First best hyperparameter
+    found by the hyperparameter search function that uses Optuna. Second is hyperparameter search
+    log. Each result in each trial is appended in that data. Third is agent_performance. also a dict.
+    But the difference is in the parameters. In this we have training_profit in train env
+    and val profit in val env and test profit in test ven.
+
+
+    save_hyperparameter_result(data). Takes the log data ({"result": 1096100576.0,"params": {
+        "lr": 0.00011038765841199872, "gamma": 0.998886582093697,"clip_epsilon": 0.1580981869246869,
+        "rollout_len": 512,"update_epochs": 12 }) and dumps it to json file in the. This function has important
+        functionality. Checks if the input is better than the best. If yes it updates the best
+
+
+    save_agent_result(data). Takes the data from a function that trains agent and test them
+    testing env and validation env. So it has 3 scores. saves the result and hyperaprameter used
+    as well.
+
+    load_best_hyperparameter(). Clear. returns the best hyperparameter for the train_agent fucntion
+    to start from a good position
+
+model_manager: library and not a class. Not satisfied at all with this one
+    What should it do. Store 5 models at max. Save ones if they are better. load any model we want.
+    print some numbers regarding the models we have
+    signatures:
+        load_model(index). Choose to return which model of the 5. 1 being the best and 5 being the worst.
+            returns model.py as a variable.
+        (load_model(index) : returns model.py)
+        save_model(model,data). Checks if the model is from the best 5. Clearly of models are not 5 he saves them.
+            informative. This is the 4th best model saved. We have better models.
+        (save_model(model,data), returns None)
+        display_info(). Procedure that prints the models and there relative performance. trainging_profit and things
+            like that.
+        (display_info(), void returns None)
+
+
+       (I had a crazy idea of implementing that. Make a class called stored_model consisting of model itself, training_results
+            and stuff all as one record. And then make a class called manger. That uses some functions to initialize the folders
+            to store models. And has these functions of store and load implemented in it. However I am hesitant doing that.)
+
+       (This is the part I was complaining about. If the storage is done in folders why do we need live objects like the
+        library we intend to make. I am a bit lost here. The library is used to imbed the functionalities inside a neat object )
+
+ppo_agent : class . Great I am satisfied with it
+train: library and not class I am satisfied with it
+    hyperparameter_search(load_best_value=True, n_trials=25, num_episodes=20, visualization=True):
+        returns None because all values should be saved with log_API. By definition
+    train_one_agent(no_episodes=60):
+        return [train_profit_changes, val_profit_changes, test_profit_changes] (preparing for next function)
+    train_multiple_agents(num_agents, episodes_per_agent):
+        returns None.
+
+visualization : library and not a class. Satisfied with this one.
+
+main:
+    initializes the log_API. and initialize the model_manager.
