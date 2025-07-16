@@ -1,0 +1,17 @@
+schema {
+    query: Query
+}
+
+type ??? {
+    success: Boolean!
+    errors: [String]
+    etc..
+}
+
+type Query {
+    ???(?:??): ???!
+}
+
+delete these lines after studying to avoid code crashing
+??? name of the query
+? name of the parameter and ?? type of this parameter

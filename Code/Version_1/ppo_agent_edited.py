@@ -26,9 +26,11 @@ class ActorCritic(nn.Module):
         # Value head
         self.value = nn.Linear(45, 1)
 
+        self.prediction = nn.Linear(45, 1)
+
     def forward(self, x: torch.Tensor):
         x = self.fc(x)
-        return self.policy(x), self.value(x)
+        return self.policy(x), self.value(x), self.prediction(x)
 
 
 class PPOAgent_edited:
@@ -59,10 +61,10 @@ class PPOAgent_edited:
     def get_action(self, obs):
         """Select an action using the current policy."""
         obs_tensor = torch.as_tensor(obs, dtype=torch.float32).unsqueeze(0)
-        probs, _ = self.model(obs_tensor)
+        probs, value , prediction = self.model(obs_tensor)
         dist = Categorical(probs)
         action = dist.sample()
-        return action.item(), dist.log_prob(action), dist.entropy()
+        return action.item(), dist.log_prob(action), dist.entropy(), prediction
 
     # ------------------------------------------------------------------
     # Return & advantage utilities
@@ -80,9 +82,9 @@ class PPOAgent_edited:
     # ------------------------------------------------------------------
     # Optimisation step
     # ------------------------------------------------------------------
-    def update(self, observations, actions, log_probs_old, returns, advantages, *, epochs: int = 10):
+    def update(self, observations, actions, log_probs_old, returns, advantages, *, epochs: int = 10, true_predictions, lambda_pred=0.5):
         for _ in range(epochs):
-            probs, values = self.model(observations)
+            probs, values, preds = self.model(observations)
             dist = Categorical(probs)
             log_probs = dist.log_prob(actions)
             entropy = dist.entropy()
@@ -96,8 +98,9 @@ class PPOAgent_edited:
             # Value function loss
             value_loss = nn.functional.mse_loss(values.view(-1), returns.view(-1))
 
-            # Combined loss with entropy bonus
-            loss = policy_loss + 0.5 * value_loss - self.entropy_coef * entropy.mean()
+            prediction_loss = nn.functional.mse_loss(preds.view(-1), true_predictions.view(-1))
+
+            loss = policy_loss + 0.5 * value_loss + lambda_pred * prediction_loss - self.entropy_coef * entropy.mean()
 
             self.optimizer.zero_grad()
             loss.backward()

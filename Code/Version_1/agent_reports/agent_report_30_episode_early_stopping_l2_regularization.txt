@@ -1,22 +1,22 @@
 ==================== AGENT PERFORMANCE REPORT ====================
-Used Hyperparameters: {'lr': 2.91341052530399e-05, 'gamma': 0.967932236822119, 'clip_epsilon': 0.20617052267311514, 'rollout_len': 128, 'update_epochs': 6}
-
---- Training Phase ---
-Total Profit: [15920.0625]
-Avg Profit/Step: [6.442760944366455]
-Max Gain: [1396.3359375]
-Max Loss: [-951.146484375]
+            Used Hyperparameters: {'lr': 5.404061918149325e-05, 'gamma': 0.9282665338434245, 'clip_epsilon': 0.2513906754990156, 'rollout_len': 128, 'update_epochs': 9}
+            
+            --- Training Phase ---
+Total Profit: [13.51953125]
+Avg Profit/Step: [0.005471279378980398]
+Max Gain: [1.228515625]
+Max Loss: [-1.65625]
 Steps: 2471
-Positive Steps: [1229]
-Negative Steps: [927]
-Neutral Steps: [315]
-Buy: 654 times (26.467017401861593%)
-Sell: 483 times (19.546742209631727%)
-Hold: 1334 times (53.98624038850668%)
-Final Inventory: 197
-Final Cash: [[6377.6636]]
-
---- Validation Phase ---
+Positive Steps: [353]
+Negative Steps: [285]
+Neutral Steps: [1833]
+Buy: 316 times (12.788344799676244%)
+Sell: 1725 times (69.8097936058276%)
+Hold: 430 times (17.401861594496154%)
+Final Inventory: 0
+Final Cash: [[10013.52]]
+            
+            --- Validation Phase ---
 Total Profit: [0.0]
 Avg Profit/Step: [0.0]
 Max Gain: [0.0]
@@ -26,12 +26,12 @@ Positive Steps: [0]
 Negative Steps: [0]
 Neutral Steps: [617]
 Buy: 0 times (0.0%)
-Sell: 0 times (0.0%)
-Hold: 617 times (100.0%)
+Sell: 617 times (100.0%)
+Hold: 0 times (0.0%)
 Final Inventory: 0
 Final Cash: [10000]
-
---- Testing Phase ---
+            
+            --- Testing Phase ---
 Total Profit: [0.0]
 Avg Profit/Step: [0.0]
 Max Gain: [0.0]
@@ -41,7 +41,8 @@ Positive Steps: [0]
 Negative Steps: [0]
 Neutral Steps: [617]
 Buy: 0 times (0.0%)
-Sell: 0 times (0.0%)
-Hold: 617 times (100.0%)
+Sell: 617 times (100.0%)
+Hold: 0 times (0.0%)
 Final Inventory: 0
 Final Cash: [10000]
+            

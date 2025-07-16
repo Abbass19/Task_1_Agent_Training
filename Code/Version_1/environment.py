@@ -24,7 +24,6 @@ class Environment(gym.Env):
         self.current_step = 0
         self.inventory = 0
         self.cash = self.initial_cash
-        print(f"[ENV] Reset called. Starting at step {self.current_step} out of {len(self.data)}")
         return self._get_observation()
 
     def _get_observation(self):
@@ -34,7 +33,7 @@ class Environment(gym.Env):
     def step(self, action):
         done = False
         price = self._get_observation()
-        prev_total_assets = self.cash + self.inventory * price  # Track before action
+        prev_total_assets = self.cash + self.inventory * price
 
         if action == 1:  # Buy
             if self.cash >= price:
