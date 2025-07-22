@@ -4,7 +4,7 @@ from log_api import *
 from model_manager import *
 import torch
 import optuna
-from environment import Environment
+from environment import Environment, dataloader, denormalize
 from ppo_agent import PPOAgent
 from ppo_agent_edited import PPOAgent_edited
 
@@ -26,9 +26,9 @@ def train_agent(report_number="", no_episodes=60):
 
     # Load data and split environments
     training_env, validation_env, testing_env = Environment.with_splits_time_series(data)
-    print(f"[INFO] Training env length: {len(training_env.data)}")
-    print(f"[INFO] Validation env length: {len(validation_env.data)}")
-    print(f"[INFO] Testing env length: {len(testing_env.data)}")
+    print(f"[INFO] Training env length: {len(training_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Validation env length: {len(validation_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Testing env length: {len(testing_env.Non_Smoothed_Data)}")
 
     def objective(trial):
         lr = trial.suggest_float("lr", 1e-5, 1e-3, log=True)
@@ -259,9 +259,9 @@ def image_one(report_number="", no_episodes=60):
 
     # Load data and split environments
     training_env, validation_env, testing_env = Environment.with_splits_time_series(data)
-    print(f"[INFO] Training env length: {len(training_env.data)}")
-    print(f"[INFO] Validation env length: {len(validation_env.data)}")
-    print(f"[INFO] Testing env length: {len(testing_env.data)}")
+    print(f"[INFO] Training env length: {len(training_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Validation env length: {len(validation_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Testing env length: {len(testing_env.Non_Smoothed_Data)}")
 
     def objective(trial):
         lr = trial.suggest_float("lr", 1e-5, 1e-3, log=True)
@@ -502,9 +502,9 @@ def image_two(report_number="", no_episodes=60):
 
     # Load data and split environments
     training_env, validation_env, testing_env = Environment.with_splits_time_series(data)
-    print(f"[INFO] Training env length: {len(training_env.data)}")
-    print(f"[INFO] Validation env length: {len(validation_env.data)}")
-    print(f"[INFO] Testing env length: {len(testing_env.data)}")
+    print(f"[INFO] Training env length: {len(training_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Validation env length: {len(validation_env.Non_Smoothed_Data)}")
+    print(f"[INFO] Testing env length: {len(testing_env.Non_Smoothed_Data)}")
 
     def objective(trial):
         lr = trial.suggest_float("lr", 1e-5, 1e-3, log=True)
@@ -739,14 +739,23 @@ Used Hyperparameters: {best_params}
 
 
 #This function returns the list for the TPG
-def image_three(report_number="", no_episodes=60):
+#The same function called image two but has signature that sends data to drawing tools
+def image_three(report_number="", no_episodes=60, hidden_size= 45, lambda_pred=0.5, drop_out =0, Normalization = False,
+                data=data):
+
     """
     Train a PPO agent with Optuna hyperparameter tuning.
     Also generates a detailed performance report.
     """
+    folder_name = (
+        f"hidden_size_{hidden_size}--"
+        f"lambda_pred_{lambda_pred}--"
+        f"drop_out_{drop_out}--"
+        f"Norm_{int(Normalization)}"
+    )
 
     # Load data and split environments
-    training_env, validation_env, testing_env = Environment.with_splits_time_series(data)
+    training_env, validation_env, testing_env = Environment.with_splits_time_series(data, Normalization= Normalization)
 
 
     def objective(trial):
@@ -825,7 +834,8 @@ def image_three(report_number="", no_episodes=60):
                 returns_tensor,
                 advantages,
                 true_predictions=prediction_targets_tensor,
-                epochs=update_epochs
+                epochs=update_epochs,
+                lambda_pred = lambda_pred
             )
 
             # Validation loop for early stopping
@@ -855,7 +865,7 @@ def image_three(report_number="", no_episodes=60):
     best_params = study.best_trial.params
     print(f"[INFO] Best hyperparameters from Optuna: {best_params}")
 
-    agent = PPOAgent_edited(obs_dim=obs_dim, act_dim=act_dim,
+    agent = PPOAgent_edited(obs_dim=obs_dim, act_dim=act_dim,hidden_size= hidden_size, drop_out = drop_out,
                             gamma=best_params["gamma"],
                             clip_epsilon=best_params["clip_epsilon"],
                             lr=best_params["lr"])
@@ -926,7 +936,8 @@ def image_three(report_number="", no_episodes=60):
             returns_tensor,
             advantages,
             true_predictions=prediction_targets_tensor,
-            epochs=update_epochs
+            epochs=update_epochs,
+            lambda_pred = lambda_pred
         )
 
 
@@ -971,7 +982,7 @@ def image_three(report_number="", no_episodes=60):
             "steps": step_count,
             "final_inventory": final_info.get("inventory", 0),
             "final_cash": final_info.get("cash", 0),
-            "initial_cash": initial_cash  # <<< ADDED THIS
+            "initial_cash": initial_cash
         }
 
     def summarize_performance(metrics):
@@ -1084,9 +1095,19 @@ Final Cash: [{metrics["final_cash"]}]
     actual_target_aligned = actual_target[:3705]
 
 
+
+    #Return Values from Normalization:
+    #All of them including both actual and predicted
+    _ , old_mean, old_std = dataloader()
+    predicted_target_numpy =  denormalize(predicted_target_numpy, old_mean= old_mean, old_std= old_std)
+    actual_target_aligned =  denormalize(actual_target_aligned, old_mean= old_mean, old_std= old_std)
+
+
+
+
     TPG_signature = [predicted_target_numpy, actual_target_aligned, test_dates_str, target, calculated_yield]
 
     print("Preparing to return TPG_signature and metrics")
-    return TPG_signature, [train_metrics["profits"], val_metrics["profits"], test_metrics["profits"]]
+    return folder_name, TPG_signature, [train_metrics["profits"], val_metrics["profits"], test_metrics["profits"]]
 
 

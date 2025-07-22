@@ -1,0 +1,5 @@
+Trial 0   finished with value: 5.369770789146424 and parameters: {'lr': 0.00013165451761987514, 'l2_lambda': 0.9735092941937935, 'input_size': 16, 'hidden_size': 128, 'batch_size':  8, 'alpha': 0.3469122680927097}. Best is trial 0 with value: 5.369770789146424.
+Trial 199 finished with value: 3.53256471157074  and parameters: {'lr': 0.0008368091634338612 , 'l2_,ambda': 0.9882562424742688, 'input_size': 8,  'hidden_size': 32,  'batch_size': 16, 'alpha': 0.274087493177839} 
+[I 2025-07-22 12:11:30,483] Trial 0 finished with value: 14.897691082954406 and parameters: {'lr': 0.00011651683247065024, 'l2_lambda': 0.9330146809850418, 'input_size': 4, 'hidden_size': 256, 'batch_size': 16, 'alpha': 0.2450400922731759}. Best is trial 0 with value: 14.897691082954406.
+
+best Hyperparameter :{'lr': 0.0009934218851301371, 'l2_,ambda': 0.997255008035645, 'input_size': 8,  'hidden_size': 64,  'batch_size': 16, 'alpha': 0.274087493177839} 

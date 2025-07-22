@@ -4,29 +4,38 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.distributions import Categorical
 
-
+# hidden_size = 45
+# drop_out = 0.2
 class ActorCritic(nn.Module):
-    def __init__(self, obs_dim: int, act_dim: int):
+    def __init__(self, obs_dim: int, act_dim: int, hidden_size: int,drop_out :float ):
         super().__init__()
 
         # Shared feature extractor
         self.fc = nn.Sequential(
-            nn.Linear(obs_dim, 45),
+            nn.Linear(obs_dim, hidden_size),
             nn.ReLU(),
-            nn.Linear(45, 45),
+            nn.Dropout(p=drop_out),
+            nn.Linear(hidden_size, hidden_size),
             nn.ReLU(),
         )
 
         # Policy head
         self.policy = nn.Sequential(
-            nn.Linear(45, act_dim),
+            nn.Linear(hidden_size, act_dim),
             nn.Softmax(dim=-1),
         )
 
         # Value head
-        self.value = nn.Linear(45, 1)
+        self.value = nn.Linear(hidden_size, 1)
 
-        self.prediction = nn.Linear(45, 1)
+        # self.prediction = nn.Linear(hidden_size, 1)
+        self.prediction = nn.Sequential(
+            nn.Linear(hidden_size, 64),  # Step 1: reduce to 128 units
+            nn.ReLU(),
+            nn.Linear(64, 32),  # Step 3: reduce to 32 units
+            nn.ReLU(),
+            nn.Linear(32, 1)  # Final output: single predicted value
+        )
 
     def forward(self, x: torch.Tensor):
         x = self.fc(x)
@@ -46,8 +55,10 @@ class PPOAgent_edited:
         lr: float = 3e-4,
         weight_decay: float = 1e-4,  # L2 regularisation coefficient
         entropy_coef: float = 0.01,  # entropy regularisation coefficient
+        hidden_size: int = 45,
+        drop_out: float = 0.0
     ) -> None:
-        self.model = ActorCritic(obs_dim, act_dim)
+        self.model = ActorCritic(obs_dim, act_dim, hidden_size , drop_out)
         self.optimizer = optim.Adam(
             self.model.parameters(), lr=lr, weight_decay=weight_decay
         )
@@ -101,6 +112,7 @@ class PPOAgent_edited:
             prediction_loss = nn.functional.mse_loss(preds.view(-1), true_predictions.view(-1))
 
             loss = policy_loss + 0.5 * value_loss + lambda_pred * prediction_loss - self.entropy_coef * entropy.mean()
+            # loss = prediction_loss
 
             self.optimizer.zero_grad()
             loss.backward()

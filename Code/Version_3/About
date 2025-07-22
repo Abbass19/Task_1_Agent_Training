@@ -1,0 +1,8 @@
+Machine Learning style using Neural Network Under the Title ; I surrender
+
+
+Function:
+    Do Normalization for the input and exporting function that
+    Only train the NN with the one prediction head on the training data. For like a Good nu,ber of epoch
+
+Then make it infer All the data inferring data

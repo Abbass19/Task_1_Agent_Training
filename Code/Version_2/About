@@ -1,0 +1,14 @@
+Things We need to Alter in this version:
+
+We have found out that all we need is to make the prediction of the stock through RDL. This means that we will have to do several changes.
+1. No need to make the split of training, testing and validation nor to create a 3 environments. Instead we will use only one
+2. In the NN architecture there is no need for the Policy or Value head. Only the prediction head.
+3. We will use the data collected before on major parts like (hidden_size = 45	lambda_pred = 0.5	drop_out = 0	Normalize (Z_score)) to start better
+training process. I will use ML analysis to get the results.
+4. The function should return the TPG signature for us to be able to Use the function to Draw and save the thing
+5. I will abandon the old API of Saving and Logging. Only the essentials no need for other details.
+6. I will make the NN head bigger than before.
+
+
+Do what is only required in the task
+He has 2 parts of data only   Train- Fitted  --> Test - Forcast

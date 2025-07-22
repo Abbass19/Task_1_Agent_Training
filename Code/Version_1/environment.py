@@ -1,3 +1,5 @@
+import os
+
 import gym
 from gym import spaces
 import numpy as np
@@ -73,7 +75,10 @@ class Environment(gym.Env):
         print(f"Total Assets: {total_assets:.2f}")
 
     @classmethod
-    def with_splits_time_series(cls, data: pd.DataFrame, n_splits=5):
+    def with_splits_time_series(cls, data: pd.DataFrame, n_splits=5,Normalization = True ):
+
+        data , old_mean , old_std= dataloader()
+
 
         tscv = TimeSeriesSplit(n_splits=n_splits)
         splits = list(tscv.split(data))
@@ -92,3 +97,20 @@ class Environment(gym.Env):
         test_env = cls(test_data)
 
         return train_env, val_env, test_env
+
+
+def dataloader():
+    csv_path = os.path.join(os.path.dirname(__file__), "my_data.csv")
+    sheet = pd.read_csv(csv_path)
+    data = sheet["MPN5P"]
+    data = np.log1p(data)
+    mean = np.mean(data)
+    std = np.std(data)
+    data = (data - mean) / std
+    return data, mean, std
+
+
+def denormalize( data, old_mean, old_std):
+    data = data*old_std + old_mean
+    data = np.expm1(data)
+    return data

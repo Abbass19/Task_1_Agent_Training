@@ -1,0 +1,27 @@
+MAPE TRIALS 
+At 0.7 ratio
+
+Manipulated Variable :	
+	1. NN size (64, 128, 256, 512)
+	2. Loss Functions (MSE, MAPE)
+	3. Split Ratio (0.6, 0.7, 0.75, 0.85)
+
+Responding Variable: 
+	1. Scalar Initial Error
+	2. Error across changing function
+
+
+We reached a conclusion through some experimentation that we don't have an easy solution. 
+I mistakenly thought that I got very good results. However I reached a certainty that 
+there is no easy trick and that trade situation needs the usage of an hyperparameter tuning function. 
+We got out of confusion and Illusion and for me this is good result. 
+
+NN: Initial Numeric Error
+
+50  : 9
+64  : 10 
+66  : 12
+80  : 16
+128 : 18
+256 : 
+512 : 
